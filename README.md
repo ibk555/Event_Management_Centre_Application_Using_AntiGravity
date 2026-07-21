@@ -27,3 +27,25 @@ Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
    ```bash
    npm install
    ```
+3. **Initialize the Database**:
+   Set up the local SQLite database and generate the Prisma Client:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+4. **Start the Development Server**:
+   ```bash
+   npm run dev
+   ```
+### Usage
+- **Customer Facing UI:** Open [http://localhost:3000](http://localhost:3000) in your browser to view the booking calendar.
+- **Admin Dashboard:** Open [http://localhost:3000/admin](http://localhost:3000/admin). 
+  - *Default Password:* `admin`
+## Environment Variables
+This project uses a `.env` file to manage environment variables. The following variables are currently used:
+- `DATABASE_URL` (Defaults to `file:./dev.db`)
+- `ADMIN_PASSWORD` (Defaults to `admin`)
+## Future Enhancements
+- Integrate Paystack payment gateway to require payment before confirmation.
+- Swap SQLite with PostgreSQL for production deployments (e.g., Vercel Postgres).
+- Integrate an email service (e.g., Resend or SendGrid) for sending automated confirmation emails.
