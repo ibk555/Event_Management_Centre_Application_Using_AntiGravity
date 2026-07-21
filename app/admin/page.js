@@ -11,9 +11,15 @@ export default function AdminDashboard() {
     try {
       const res = await fetch('/api/bookings');
       const data = await res.json();
-      setBookings(data);
+      if (Array.isArray(data)) {
+        setBookings(data);
+      } else {
+        console.error("API Error:", data);
+        setBookings([]);
+      }
     } catch (error) {
-      console.error("Failed to fetch bookings");
+      console.error("Failed to fetch bookings:", error);
+      setBookings([]);
     }
   };
 
@@ -86,10 +92,10 @@ export default function AdminDashboard() {
       </header>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {bookings.length === 0 ? (
+        {!(bookings || []).length ? (
           <p style={{ color: 'var(--disabled-text)', textAlign: 'center' }}>No bookings found.</p>
         ) : (
-          bookings.map(booking => (
+          (bookings || []).map(booking => (
             <div key={booking.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <h3>{booking.customerName} <span style={{ fontSize: '0.9rem', color: 'var(--disabled-text)', fontWeight: 'normal' }}>({booking.customerEmail})</span></h3>

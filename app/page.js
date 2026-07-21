@@ -20,9 +20,15 @@ export default function Home() {
     try {
       const res = await fetch(`/api/bookings?date=${selectedDate}`);
       const data = await res.json();
-      setBookings(data);
+      if (Array.isArray(data)) {
+        setBookings(data);
+      } else {
+        console.error("API Error:", data);
+        setBookings([]);
+      }
     } catch (error) {
-      console.error("Failed to fetch bookings");
+      console.error("Failed to fetch bookings:", error);
+      setBookings([]);
     }
   };
 
@@ -31,7 +37,7 @@ export default function Home() {
   }, [selectedDate]);
 
   const handleSlotClick = (hour) => {
-    const isBooked = bookings.some(b => b.timeSlot === hour && b.status !== 'CANCELLED');
+    const isBooked = (bookings || []).some(b => b.timeSlot === hour && b.status !== 'CANCELLED');
     if (!isBooked) {
       setSelectedSlot(hour);
       setIsModalOpen(true);
@@ -89,7 +95,7 @@ export default function Home() {
 
       <div className="slots-grid">
         {HOURS.map(hour => {
-          const isBooked = bookings.some(b => b.timeSlot === hour && b.status !== 'CANCELLED');
+          const isBooked = (bookings || []).some(b => b.timeSlot === hour && b.status !== 'CANCELLED');
           return (
             <div 
               key={hour}

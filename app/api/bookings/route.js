@@ -17,7 +17,15 @@ export async function GET(request) {
     
     return NextResponse.json(bookings);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch bookings' }, { status: 500 });
+    console.error("Database error:", error);
+    return NextResponse.json(
+      { 
+        error: 'Failed to fetch bookings', 
+        details: error.message,
+        hint: 'Ensure DATABASE_URL is set in Vercel Environment Variables.'
+      }, 
+      { status: 500 }
+    );
   }
 }
 
